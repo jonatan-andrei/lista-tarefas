@@ -1,101 +1,79 @@
 <template>
-  <div class="row">
+  <div class="template">
+    <div class="row">
+      <div class="title">Lista de Tarefas</div>
+    </div>
+
     <div>
-      <input v-model="task" placeholder="Adicione uma nova tarefa" />
-      <button v-on:click="addNewItem">Confirmar</button>
+      <div class="row input-group form-add-task">
+        <input
+          type="text"
+          class="form-control"
+          v-model="task"
+          placeholder="Adicione uma nova tarefa"
+        />
+        <div class="input-group-prepend">
+          <button class="btn btn-outline-secondary" v-on:click="addNewItem">
+            Confirmar
+          </button>
+        </div>
+      </div>
     </div>
 
-    <div class="col-4">
-      <h3>First draggable with header</h3>
+    <div class="row">
+      <div class="col-4 list-tasks">
+        <h3 class="title-tasks">A fazer</h3>
 
-      <draggable
-        id="first"
-        data-source="juju"
-        :list="list"
-        class="list-group"
-        draggable=".item"
-        group="a"
-      >
-        <div
-          class="list-group-item item"
-          v-for="element in list"
-          :key="element.name"
+        <draggable :list="list" class="list-group" draggable=".item" group="a">
+          <div
+            class="list-group-item item new-tasks tasks"
+            v-for="element in list"
+            :key="element.name"
+          >
+            {{ element.name }}
+          </div>
+        </draggable>
+      </div>
+
+      <div class="col-4 list-tasks">
+        <h3 class="title-tasks">Em andamento</h3>
+
+        <draggable
+          :list="pending"
+          class="list-group"
+          draggable=".item"
+          group="a"
         >
-          {{ element.name }}
-        </div>
+          <div
+            class="list-group-item item pending-tasks tasks"
+            v-for="element in pending"
+            :key="element.name"
+          >
+            {{ element.name }}
+          </div>
+        </draggable>
+      </div>
 
-        <div
-          slot="header"
-          class="btn-group list-group-item"
-          role="group"
-          aria-label="Basic example"
-        >
-          <button class="btn btn-secondary" @click="add">Add</button>
-          <button class="btn btn-secondary" @click="replace">Replace</button>
-        </div>
-      </draggable>
-    </div>
+      <div class="col-4 list-tasks">
+        <h3 class="title-tasks">Concluído</h3>
 
-    <div class="col-4">
-      <h3>Second draggable with header</h3>
-
-      <draggable :list="list2" class="list-group" draggable=".item" group="a">
-        <div
-          class="list-group-item item"
-          v-for="element in list2"
-          :key="element.name"
-        >
-          {{ element.name }}
-        </div>
-
-        <div
-          slot="header"
-          class="btn-group list-group-item"
-          role="group"
-          aria-label="Basic example"
-        >
-          <button class="btn btn-secondary" @click="add2">Add</button>
-          <button class="btn btn-secondary" @click="replace2">Replace</button>
-        </div>
-      </draggable>
-    </div>
-
-    <div class="col-4">
-      <h3>First draggable with header</h3>
-
-      <draggable
-        id="first"
-        data-source="juju"
-        :list="list3"
-        class="list-group"
-        draggable=".item"
-        group="a"
-      >
-        <div
-          class="list-group-item item"
-          v-for="element in list3"
-          :key="element.name"
-        >
-          {{ element.name }}
-        </div>
-
-        <div
-          slot="header"
-          class="btn-group list-group-item"
-          role="group"
-          aria-label="Basic example"
-        >
-          <button class="btn btn-secondary" @click="add3">Add</button>
-          <button class="btn btn-secondary" @click="replace3">Replace</button>
-        </div>
-      </draggable>
+        <draggable :list="done" class="list-group" draggable=".item" group="a">
+          <div
+            class="list-group-item item done-tasks tasks"
+            v-for="element in done"
+            :key="element.name"
+          >
+            {{ element.name }}
+          </div>
+        </draggable>
+      </div>
     </div>
 
     <rawDisplayer class="col-2" :value="list" title="List" />
 
-    <rawDisplayer class="col-2" :value="list2" title="List2" />
+    <rawDisplayer class="col-2" :value="pending" title="Pending" />
 
-    <rawDisplayer class="col-2" :value="list2" title="List3" />
+    <rawDisplayer class="col-2" :value="done" title="Done" />
   </div>
 </template>
 
@@ -103,9 +81,7 @@
 import draggable from "vuedraggable";
 let id = 1;
 export default {
-  name: "two-list-headerslots",
-  display: "Two list header slot",
-  order: 14,
+  name: "lista-tarefas",
   task: "",
   components: {
     draggable,
@@ -117,11 +93,11 @@ export default {
         { name: "Joao 2", id: 1 },
         { name: "Jean 3", id: 2 },
       ],
-      list2: [
+      pending: [
         { name: "Jonny 4", id: 3 },
         { name: "Guisepe 5", id: 4 },
       ],
-      list3: [
+      done: [
         { name: "John 1", id: 5 },
         { name: "Joao 2", id: 6 },
         { name: "Jean 3", id: 7 },
@@ -133,28 +109,50 @@ export default {
       let newTask = this.task;
       if (newTask) {
         this.list.push({ name: newTask, id: id++ });
-        this.task = '';
+        this.task = "";
       }
-    },
-    add: function () {
-      this.list.push({ name: "Juan " + id, id: id++ });
-    },
-    replace: function () {
-      this.list = [{ name: "Edgard", id: id++ }];
-    },
-    add2: function () {
-      this.list2.push({ name: "Juan " + id, id: id++ });
-    },
-    replace2: function () {
-      this.list2 = [{ name: "Edgard", id: id++ }];
-    },
-    add3: function () {
-      this.list3.push({ name: "Juan " + id, id: id++ });
-    },
-    replace3: function () {
-      this.list3 = [{ name: "Edgard", id: id++ }];
     },
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.template {
+  margin: 20px;
+  height: 100vh;
+}
+.title {
+  text-align: center;
+  margin: 0 auto;
+  padding: 30px;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  color: green;
+  font-size: 50px;
+}
+.form-add-task {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.tasks {
+  margin: 5px;
+  min-height: 50px;
+  min-width: 300px;
+  color: white;
+  text-align: center;
+  font-size: 20px;
+}
+.title-tasks {
+  text-align: center;
+}
+.list-tasks {
+  padding: 50px;
+}
+.list-group .new-tasks {
+  background-color: blue;
+}
+.list-group .pending-tasks {
+  background-color: orangered;
+}
+.list-group .done-tasks {
+  background-color: green;
+}
+</style>
