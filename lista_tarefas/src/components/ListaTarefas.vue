@@ -88,20 +88,9 @@ export default {
   },
   data() {
     return {
-      list: [
-        { name: "John 1", id: 0 },
-        { name: "Joao 2", id: 1 },
-        { name: "Jean 3", id: 2 },
-      ],
-      pending: [
-        { name: "Jonny 4", id: 3 },
-        { name: "Guisepe 5", id: 4 },
-      ],
-      done: [
-        { name: "John 1", id: 5 },
-        { name: "Joao 2", id: 6 },
-        { name: "Jean 3", id: 7 },
-      ],
+      list: [],
+      pending: [],
+      done: [],
     };
   },
   methods: {
